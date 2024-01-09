@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "react-modal";
 
 const ContactForm = ({
@@ -10,7 +10,9 @@ const ContactForm = ({
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  useEffect(() => {
+    Modal.setAppElement("#root");
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.trim() !== "" && number.trim() !== "") {
