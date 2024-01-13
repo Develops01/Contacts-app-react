@@ -1,66 +1,60 @@
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
 
-const ContactForm = ({
-  onAddContact,
-  onEditContact,
-  editIndex,
-  setEditIndex,
+const NaForm = ({
+  modOpen,
+  modClose,
+  setIsOpen,
+  isOpen,
+  editCont,
+  addCon,
+  ind,
+  setInd,
 }) => {
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [num, setnum] = useState("");
+  const [name, setname] = useState("");
   useEffect(() => {
     Modal.setAppElement("#root");
   }, []);
-  const handleSubmit = (e) => {
+  const formHandler = (e) => {
     e.preventDefault();
-    if (name.trim() !== "" && number.trim() !== "") {
-      if (editIndex === null) {
-        onAddContact({ name, number });
+    if (num.trim() !== "" && name.trim() !== "") {
+      if (ind === null) {
+        addCon({ num, name });
       } else {
-        onEditContact(editIndex, { name, number });
-        setEditIndex(null);
+        editCont(ind, { num, name });
+        setInd(null);
       }
-      setName("");
-      setNumber("");
-      setModalIsOpen(false);
+      setnum("");
+      setname("");
+      setIsOpen(false);
     }
-  };
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
   };
 
   return (
     <div className=" flex justify-end m-2">
       <button
         className="   bg-[#183227] text-[#D5D4CF] py-2.5 px-4 rounded hover:bg-[#143b2b]"
-        onClick={() => openModal()}
+        onClick={() => modOpen()}
       >
-        {editIndex !== null ? "Edit Contact" : "Add Contact"}
+        {ind === null ? "Add" : "Edit"}
       </button>
-
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        isOpen={isOpen}
+        onRequestClose={modClose}
         contentLabel="Edit Contact Modal"
         className="modal"
         overlayClassName="overlay"
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={formHandler}>
           <div className="mb-4">
             <input
               className="border p-2 rounded w-full"
               type="text"
               placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
               required
+              value={name}
+              onChange={(e) => setname(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -68,8 +62,8 @@ const ContactForm = ({
               className="border p-2 rounded w-full"
               type="text"
               placeholder="Number"
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
+              value={num}
+              onChange={(e) => setnum(e.target.value)}
               required
             />
           </div>
@@ -78,11 +72,14 @@ const ContactForm = ({
               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
               type="submit"
             >
-              {editIndex !== null ? "Edit" : "Add"}
+              {ind === null ? "Add" : "Edit"}
             </button>
             <button
               className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
-              onClick={closeModal}
+              onClick={() => {
+                modClose();
+                setInd(null);
+              }}
             >
               Cancel
             </button>
@@ -92,5 +89,4 @@ const ContactForm = ({
     </div>
   );
 };
-
-export default ContactForm;
+export default NaForm;
